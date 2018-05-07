@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 /**
- * Created by jt on 10/6/17.
+ * Created by jt on 9/27/17.
  */
 @Mapper
 public interface VendorMapper {

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by jt on 10/6/17.
+ * Created by jt on 9/27/17.
  */
 @Service
 public class VendorServiceImpl implements VendorService {
@@ -24,7 +24,7 @@ public class VendorServiceImpl implements VendorService {
         this.vendorMapper = vendorMapper;
         this.vendorRepository = vendorRepository;
     }
-
+    
     @Override
     public VendorDTO getVendorById(Long id) {
         return vendorRepository.findById(id)
@@ -35,7 +35,7 @@ public class VendorServiceImpl implements VendorService {
                 })
                 .orElseThrow(ResourceNotFoundException::new);
     }
-
+    
     @Override
     public VendorListDTO getAllVendors() {
         List<VendorDTO> vendorDTOS = vendorRepository
@@ -47,24 +47,24 @@ public class VendorServiceImpl implements VendorService {
                     return vendorDTO;
                 })
                 .collect(Collectors.toList());
-
+        
         return new VendorListDTO(vendorDTOS);
     }
 
     @Override
     public VendorDTO createNewVendor(VendorDTO vendorDTO) {
+
         return saveAndReturnDTO(vendorMapper.vendorDTOtoVendor(vendorDTO));
     }
-
+    
     @Override
     public VendorDTO saveVendorByDTO(Long id, VendorDTO vendorDTO) {
+        Vendor vendor = vendorMapper.vendorDTOtoVendor(vendorDTO);
+        vendor.setId(id);
 
-        Vendor vendorToSave = vendorMapper.vendorDTOtoVendor(vendorDTO);
-        vendorToSave.setId(id);
-
-        return saveAndReturnDTO(vendorToSave);
+        return saveAndReturnDTO(vendor);
     }
-
+    
     @Override
     public VendorDTO patchVendor(Long id, VendorDTO vendorDTO) {
         return vendorRepository.findById(id)
@@ -78,23 +78,23 @@ public class VendorServiceImpl implements VendorService {
                     return saveAndReturnDTO(vendor);
                 }).orElseThrow(ResourceNotFoundException::new);
     }
-
+    
     @Override
     public void deleteVendorById(Long id) {
         vendorRepository.deleteById(id);
     }
-
+    
     private String getVendorUrl(Long id) {
         return VendorController.BASE_URL + "/" + id;
     }
-
+    
     private VendorDTO saveAndReturnDTO(Vendor vendor) {
         Vendor savedVendor = vendorRepository.save(vendor);
-
+        
         VendorDTO returnDto = vendorMapper.vendorToVendorDTO(savedVendor);
-
+        
         returnDto.setVendorUrl(getVendorUrl(savedVendor.getId()));
-
+        
         return returnDto;
     }
 }

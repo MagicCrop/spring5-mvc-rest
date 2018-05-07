@@ -8,10 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- * Created by jt on 10/6/17.
+ * Created by jt on 9/27/17.
  */
-@Data
 @Entity
+@Data
 public class Vendor {
 
     @Id
